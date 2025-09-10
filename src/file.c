@@ -8,8 +8,15 @@ int print_hello_world(void) {
 }
 
 int handleEmpty(FILE *fil){
+  fseek(fil, 0, SEEK_END);
+  int position_in_file = ftell(fil);
+  fclose(fil);
 
+  return position_in_file == 0;
+  
 }
+  
+
 int handleASCII(FILE *fil){
 
 }
@@ -30,7 +37,12 @@ int handleData(FILE *fil){
 
 int main(int argc, char* argv[]) {
 
-  FILE *fil = argv[1];
+  if (argc > 1){
+    printf("too many arguments");
+    return 1;
+  }
+  char* path = argv[1];
+  FILE *fil = fopen(path, 'rb');
   if (handleEmpty(fil)){
     return 0;
   }
@@ -46,10 +58,7 @@ int main(int argc, char* argv[]) {
   if (handleData(fil)){
     return 0;
   }
-  if (argc > 1){
-    printf("too many arguments");
-    return 1;
-  }
+
   int retval = EXIT_SUCCESS;
 
   if (print_hello_world() <= 0) {
