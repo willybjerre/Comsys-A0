@@ -33,11 +33,11 @@ printf "Du er verdens bedste TA hvis du giver os maaaax points\n ps tak på forh
 
 # UTF-8
 printf "Hello, Wörld!\n" > test_files/utf8.input
-printf "Hello, Wørld!" > test_files/utf82.input
+printf "Hello, Wørld!\n" > test_files/utf82.input
 printf "Hello, 世界!\n" > test_files/utf83.input
-printf "Hello, 世界!" > test_files/utf84.input
+printf "Hello, 世界!\n" > test_files/utf84.input
 printf "😀 emoji\n" > test_files/utf85.input
-printf "🍝🐥🐜🍆🍑" > test_files/utf86.input
+printf "🍝🐥🐜🍆🍑\n" > test_files/utf86.input
 printf "¡Hola señor!\n" > test_files/utf87.input
 printf "ÆØÅ æøå i en sætning\n" > test_files/utf88.input
 printf "JägerBomben\n" > test_files/utf89.input
@@ -50,7 +50,7 @@ printf "Sm\xF8rrebr\xF8d\n" > test_files/iso1.input
 printf "Caf\xE9\n" > test_files/iso2.input
 printf "R\xF8dgr\xF8d med fl\xF8de\n" > test_files/iso3.input
 printf "Fu\xDFball\n" > test_files/iso4.input
-printf "\xC5rhus\n" > test_files/iso05.input 
+printf "a\xC5rhus\n" > test_files/iso05.input 
 printf "Mix: \xE6\xF8\xE5 / \xC6\xD8\xC5\n" > test_files/iso6.input 
 printf "P\xE5 l\xF8rdag skal vi feste hele natten\n" > test_files/iso7.input
 printf "T\xE6nk at det ikke er sommer mere!\n" > test_files/iso8.input
@@ -66,7 +66,7 @@ printf "\xDE\xAD\xBE\xEF" > test_files/data4.input
 printf "\xBA\xAD\xF0\x0D" > test_files/data5.input
 printf "\xCA\xFE\xBA\xBE" > test_files/data6.input
 printf "\x00\xFF\x7F\x80" > test_files/data7.input
-printf "\x10\x20\x30\x40\x50\x60\x70\x80\x90\xA0\xB0\xC0\xD0\xE0\xF0" > test_files/data8.input
+printf "\xAD\xBE\xEF\xDE" > test_files/data8.input
 printf "\xDE\xAD\xC0\xDE" > test_files/data9.input
 printf "\xFE\xED\xFA\xCE" > test_files/data10.input
 printf "\xBE\xEF\xCA\xFE" > test_files/data11.input

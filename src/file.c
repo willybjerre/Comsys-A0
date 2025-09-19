@@ -48,85 +48,90 @@ int handleISO(FILE *fil){
 
 int handleUTF(FILE *fil){
   fseek(fil, 0, SEEK_SET);
-  int c = fgetc(fil);
-  while (c != EOF)
-  {
+  int c;
+ while ((c = fgetc(fil)) != EOF) {
     unsigned char byte = (unsigned char)c;
-    if (byte <= 0x7F){
-      continue;
+
+    if (byte <= 0x7F) {
+        continue;
     }
-    else if ((byte & 0xC0) == 0xC0){
-      int byte1 = fgetc(fil);
-      if ((byte1 & 0xC0) == 0x80){
-        return 1;
-      }
+    else if ((byte & 0xE0) == 0xC0) {
+        int b1 = fgetc(fil);
+        if (b1 == EOF || ((unsigned char)b1 & 0xC0) != 0x80)
+            return 0; 
     }
-    else if ((byte & 0xE0) == 0xE0){
-      int byte1 = fgetc(fil);
-      int byte2 = fgetc(fil);
-      if ((byte1 & 0xC0) == 0x80 && (byte2 & 0xC0) == 0x80){
-        return 1;
-      }
+    else if ((byte & 0xF0) == 0xE0) {
+        int b1 = fgetc(fil), b2 = fgetc(fil);
+        if (b2 == EOF) return 0;
+        if (((unsigned char)b1 & 0xC0) != 0x80 ||
+            ((unsigned char)b2 & 0xC0) != 0x80)
+            return 0;
     }
-    else if ((byte & 0xF0) == 0xF0){
-      int byte1 = fgetc(fil);
-      int byte2 = fgetc(fil);
-      int byte3 = fgetc(fil);
-      if ((byte1 & 0xC0) == 0x80 && (byte2 & 0xC0) == 0x80 && (byte3 & 0xC0) == 0x80){
-        return 1;
-      }
-    }  
-    
+    else if ((byte & 0xF8) == 0xF0) {
+        int b1 = fgetc(fil), b2 = fgetc(fil), b3 = fgetc(fil);
+        if (b3 == EOF) return 0;
+        if (((unsigned char)b1 & 0xC0) != 0x80 ||
+            ((unsigned char)b2 & 0xC0) != 0x80 ||
+            ((unsigned char)b3 & 0xC0) != 0x80)
+            return 0;
     }
-    return 0;
+    else {
+        return 0; 
+    }
 }
 
 
+return 1;
+}
+
+int handlefiles(int argc, char* argv[]){
+    if (argc > 2){
+        printf("too many arguments\n");
+        return 1; 
+    }
+
+    if (argc == 1){
+        printf("Usage: file path\n");
+        return 1;  
+    }
+
+    char* path = argv[1];
+    FILE *fil = fopen(path, "rb");
+
+    if (fil == NULL){
+        fprintf(stdout, "%s: cannot determine (%s)\n",
+                path, strerror(errno));
+        return 1;  
+    }
+
+    if (handleEmpty(fil)){
+        printf("%s: empty\n", path);
+        fclose(fil);
+        return 0;  
+    }
+    if (handleASCII(fil)){
+        printf("%s: ASCII text\n", path);
+        fclose(fil);
+        return 0;
+    }
+      if (handleUTF(fil)){
+        printf("%s: Unicode text, UTF-8 text\n", path);
+        fclose(fil);
+        return 0;
+    }
+    if (handleISO(fil)){
+        printf("%s: ISO-8859 text\n", path);
+        fclose(fil);
+        return 0;
+    }
+    else{
+    printf("%s: data\n", path);
+    fclose(fil);
+    return 0;
+    }
+
+}
+
 int main(int argc, char* argv[]) {
-  if (argc > 2){
-    printf("too many arguments");
-    return 0;
-  }
-
-  if (argc == 1){
-    printf("Usage: file path");
-    return 0;
-  }
-
-  char* path = argv[1];
-  FILE *fil = fopen(path, "rb");
-
-  if (fil == NULL){
-    fprintf(stdout, "%s: cannot determine (%s)\n",
-    path, strerror(errno));
-    return 0;
-  }
-
-  if (handleEmpty(fil)){
-    printf("empty\n");
-    fclose(fil);
-    return 1;
-  }
-  if (handleASCII(fil)){
-    printf("ASCII text\n");
-    fclose(fil);
-    return 1;
-  }
-  if (handleUTF(fil)){
-    fclose(fil);
-    printf("UTF-8 Unicode text\n");
-    return 1;
-  }
-  if (handleISO(fil)){
-    fclose(fil);
-    printf("ISO-8859 text\n");
-    return 1;
-  }
-  else{
-    fclose(fil);
-    printf("data file\n");
-    return 1;
-  }
-  fclose(fil);
-  return 0;
+    return handlefiles(argc, argv);
 }
