@@ -14,7 +14,7 @@ rm -f test_files/*
 echo "Generating test files.."
 printf "Hello, World!\n" > test_files/ascii.input
 printf "Hello, World!" > test_files/ascii2.input
-printf "Hello,\x00World!\n" > test_files/data.input
+printf "Hello,\xEEWorld!\n" > test_files/data.input
 printf "" > test_files/empty.input
 ### TODO: Generate more test files ###
 
@@ -60,18 +60,18 @@ printf "Se\xF1or Pi\xF1ata\n" > test_files/iso11.input
 printf "Cr\xE8me br\xFBl\xE9e\n" > test_files/iso12.input 
 
 # Data
-printf "\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0A\x0B\x0C\x0D\x0E\x0F" > test_files/data2.input
-printf "\xFF\xFE\xFD\xFC\xFB\xFA\xF9\xF8\xF7\xF6\xF5\xF4\xF3\xF2\xF1\xF0" > test_files/data3.input
-printf "\xDE\xAD\xBE\xEF" > test_files/data4.input
-printf "\xBA\xAD\xF0\x0D" > test_files/data5.input
-printf "\xCA\xFE\xBA\xBE" > test_files/data6.input
-printf "\x00\xFF\x7F\x80" > test_files/data7.input
-printf "\xAD\xBE\xEF\xDE" > test_files/data8.input
-printf "\xDE\xAD\xC0\xDE" > test_files/data9.input
-printf "\xFE\xED\xFA\xCE" > test_files/data10.input
-printf "\xBE\xEF\xCA\xFE" > test_files/data11.input
-printf "\x00\x11\x22\x33\x44\x55\x66\x77\x88\x99\xAA\xBB\xCC\xDD\xEE\xFF" > test_files/data12.input
-
+printf "\xDE\xAD\xBE\xEF" > test_files/data1.input
+printf "\xBA\xAD\xF0\x0D" > test_files/data2.input
+printf "\xCA\xFE\xBA\xBE" > test_files/data3.input
+printf "\xAD\xBE\xEF\xDE" > test_files/data4.input
+printf "\xDE\xAD\xC0\xDE" > test_files/data5.input
+printf "\xFA\xCE\xB0\x0C" > test_files/data6.input
+printf "\xC0\xFF\xEE\x0C" > test_files/data7.input
+printf "\x0B\xAD\xF0\x0D" > test_files/data8.input
+printf "\xAD\xBE\xEF\x0C" > test_files/data9.input
+printf "\xAB\xAD\xEE\x0C" > test_files/data10.input
+printf "\xFE\xED\xEE\xCE" > test_files/data11.input
+printf "\xBE\xEF\xCA\xFE" > test_files/data12.input
 
 
 

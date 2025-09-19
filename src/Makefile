@@ -24,3 +24,6 @@ clean:
 	rm -rf file.dSYM  # For Mac users
 
 .PHONY: clean
+
+test: test.sh file
+	./test.sh
