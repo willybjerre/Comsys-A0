@@ -5,7 +5,7 @@
 
 
 
-
+// Function to check if a file is empty
 int handleEmpty(FILE *fil){
   fseek(fil, 0, SEEK_END);
   int position_in_file = ftell(fil);
@@ -13,7 +13,7 @@ int handleEmpty(FILE *fil){
   return position_in_file == 0;
 }
   
-
+// Function to check if a file is valid ASCII
 int handleASCII(FILE *fil){
 
   int check_if_Ascii = 1;
@@ -30,7 +30,7 @@ int handleASCII(FILE *fil){
   }
   return check_if_Ascii;
 }
-
+// Function to check if a file is valid ISO-8859
 int handleISO(FILE *fil){
   int check_if_Ascii = 0;
 
@@ -46,6 +46,7 @@ int handleISO(FILE *fil){
   return check_if_Ascii;
 }
 
+// Function to check if a file is valid UTF-8
 int handleUTF(FILE *fil){
   fseek(fil, 0, SEEK_SET);
   int c;
@@ -55,19 +56,19 @@ int handleUTF(FILE *fil){
     if (byte <= 0x7F) {
         continue;
     }
-    else if ((byte & 0xE0) == 0xC0) {
+    else if ((byte & 0xE0) == 0xC0)  { // 2-byte sequence
         int b1 = fgetc(fil);
         if (b1 == EOF || ((unsigned char)b1 & 0xC0) != 0x80)
             return 0; 
     }
-    else if ((byte & 0xF0) == 0xE0) {
+    else if ((byte & 0xF0) == 0xE0) { // 3-byte sequence
         int b1 = fgetc(fil), b2 = fgetc(fil);
         if (b2 == EOF) return 0;
         if (((unsigned char)b1 & 0xC0) != 0x80 ||
             ((unsigned char)b2 & 0xC0) != 0x80)
             return 0;
     }
-    else if ((byte & 0xF8) == 0xF0) {
+    else if ((byte & 0xF8) == 0xF0) { // 4-byte sequence
         int b1 = fgetc(fil), b2 = fgetc(fil), b3 = fgetc(fil);
         if (b3 == EOF) return 0;
         if (((unsigned char)b1 & 0xC0) != 0x80 ||
@@ -83,7 +84,7 @@ int handleUTF(FILE *fil){
 
 return 1;
 }
-
+// Main function to handle file input and determine file type
 int handlefiles(int argc, char* argv[]){
     if (argc > 2){
         printf("too many arguments\n");
@@ -104,22 +105,22 @@ int handlefiles(int argc, char* argv[]){
         return 1;  
     }
 
-    if (handleEmpty(fil)){
+    if (handleEmpty(fil)){ // Check if the file is empty
         printf("%s: empty\n", path);
         fclose(fil);
         return 0;  
     }
-    if (handleASCII(fil)){
+    if (handleASCII(fil)){ // Check if the file is ASCII
         printf("%s: ASCII text\n", path);
         fclose(fil);
         return 0;
     }
-      if (handleUTF(fil)){
+      if (handleUTF(fil)){ // Check if the file is UTF-8
         printf("%s: Unicode text, UTF-8 text\n", path);
         fclose(fil);
         return 0;
     }
-    if (handleISO(fil)){
+    if (handleISO(fil)){ // Check if the file is ISO-8859
         printf("%s: ISO-8859 text\n", path);
         fclose(fil);
         return 0;
@@ -131,7 +132,7 @@ int handlefiles(int argc, char* argv[]){
     }
 
 }
-
+// Entry point of the program
 int main(int argc, char* argv[]) {
     return handlefiles(argc, argv);
 }
